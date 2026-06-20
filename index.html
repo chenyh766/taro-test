@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#2d6a4f">
+    <meta name="description" content="芋头病害检测系统 - 上传图片或拍照识别芋头病虫害">
+    <title>🌿 芋头病害检测系统</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="app-header">
+        <h1>🌿 芋头病害检测</h1>
+        <span class="subtitle">Taro Disease Detector</span>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-container">
+
+        <!-- Image Input Zone -->
+        <section class="upload-zone" id="uploadZone">
+            <div class="upload-preview" id="uploadPreview">
+                <div class="upload-placeholder">
+                    <span class="upload-icon">📷</span>
+                    <p>点击上传图片 或 拍照识别</p>
+                    <p class="hint">支持 JPG / PNG，最大 10MB</p>
+                </div>
+                <img id="previewImage" class="preview-img" alt="预览图片" style="display:none">
+            </div>
+            <div class="upload-actions">
+                <label class="btn btn-primary" for="fileInput">
+                    📁 选择图片
+                    <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp" hidden>
+                </label>
+                <button class="btn btn-secondary" id="cameraBtn">
+                    📸 拍照
+                </button>
+            </div>
+            <button class="btn btn-detect" id="detectBtn" disabled>
+                🔍 开始检测
+            </button>
+            <div class="loading" id="loadingIndicator" style="display:none">
+                <div class="spinner"></div>
+                <p>正在分析中...</p>
+            </div>
+        </section>
+
+        <!-- Results Card -->
+        <section class="results-card" id="resultsCard" style="display:none">
+            <h2>检测结果</h2>
+            <div class="primary-result" id="primaryResult">
+                <div class="result-icon" id="resultIcon">🟢</div>
+                <div class="result-info">
+                    <span class="result-class" id="resultClass">--</span>
+                    <div class="confidence-ring">
+                        <svg viewBox="0 0 100 100" class="ring-svg">
+                            <circle cx="50" cy="50" r="42" class="ring-bg"/>
+                            <circle cx="50" cy="50" r="42" class="ring-fill" id="ringFill"
+                                    stroke-dasharray="0 264" stroke-dashoffset="0"/>
+                        </svg>
+                        <span class="confidence-text" id="confidenceText">0%</span>
+                    </div>
+                </div>
+            </div>
+            <div class="recommendation-box" id="recommendationBox">
+                <strong>💡 防治建议：</strong>
+                <p id="recommendationText"></p>
+            </div>
+            <div class="secondary-results" id="secondaryResults">
+                <h3>其他可能性</h3>
+                <div class="score-bars" id="scoreBars"></div>
+            </div>
+            <div class="processing-time" id="processingTime"></div>
+            <div class="result-actions">
+                <button class="btn btn-outline" id="resetBtn">🔄 重新检测</button>
+                <button class="btn btn-outline" id="viewHistoryBtn">📜 查看历史</button>
+            </div>
+        </section>
+
+        <!-- Disease Guide -->
+        <section class="disease-guide" id="diseaseGuide">
+            <h2>📖 病害知识库</h2>
+            <div class="accordion" id="accordion"></div>
+        </section>
+
+        <!-- History Section -->
+        <section class="history-section" id="historySection">
+            <h2>📜 检测历史</h2>
+            <div class="history-grid" id="historyGrid">
+                <p class="empty-hint">暂无检测记录</p>
+            </div>
+            <div class="history-pagination" id="historyPagination"></div>
+        </section>
+
+    </main>
+
+    <!-- Camera Modal -->
+    <div class="modal-overlay" id="cameraModal" style="display:none">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📸 拍摄芋头叶片</h3>
+                <button class="btn-close" id="closeCameraBtn">✕</button>
+            </div>
+            <div class="camera-container">
+                <video id="cameraVideo" autoplay playsinline></video>
+                <canvas id="cameraCanvas" style="display:none"></canvas>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="switchCameraBtn">🔄 切换摄像头</button>
+                <button class="btn btn-primary" id="captureBtn">📷 拍摄</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Toast -->
+    <div class="toast" id="toast" style="display:none">
+        <span class="toast-icon">⚠️</span>
+        <span class="toast-message" id="toastMessage"></span>
+    </div>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <p>基于深度学习 · PyTorch + EfficientNet | 仅供参考，不构成农业建议</p>
+    </footer>
+
+    <script src="js/api.js"></script>
+    <script src="js/camera.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
